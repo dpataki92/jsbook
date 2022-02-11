@@ -34,7 +34,7 @@ export const unpkgPathPlugin = () => {
           return {
             loader: "jsx",
             contents: `
-              const message = require('axios');
+              import React, {useState } from 'react';
               console.log(message);
             `,
           };
