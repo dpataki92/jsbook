@@ -1,9 +1,12 @@
-import './code-editor.css';
+import "./code-editor.css";
 import { useRef } from "react";
 import MonacoEditor, { EditorDidMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
-
+/* import { parse } from "@babel/parser";
+import traverse from "@babel/traverse";
+import MonacoJSXHighlighter from 'monaco-jsx-highlighter';
+import babel from "@babel/core"; */
 interface CodeEditorProps {
   initialValue: string;
   onChange(value: string): void;
@@ -19,24 +22,34 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
     });
 
     monacoEditor.getModel()?.updateOptions({ tabSize: 2 });
+
+/*     const monacoJSXHighlighter = new MonacoJSXHighlighter(
+      MonacoEditor, babel, traverse, monacoEditor
+   );
+    // Activate highlighting (debounceTime default: 100ms)
+    monacoJSXHighlighter.highlightOnDidChangeModelContent(100);
+    // Activate JSX commenting
+    monacoJSXHighlighter.addJSXCommentCommand(); */
   };
 
   const onFormatClick = () => {
     const unformatted = editorRef.current.getModel().getValue();
 
-    const formatted = prettier.format(unformatted, {
-      parser: "babel",
-      plugins: [parser],
-      useTabs: false,
-      semi: true,
-      singleQuote: true,
-    }).replace(/\n$/, '');
+    const formatted = prettier
+      .format(unformatted, {
+        parser: "babel",
+        plugins: [parser],
+        useTabs: false,
+        semi: true,
+        singleQuote: true,
+      })
+      .replace(/\n$/, "");
 
     editorRef.current.setValue(formatted);
   };
 
   return (
-    <div className='editor-wrapper'>
+    <div className="editor-wrapper">
       <button
         className="button button-format is-primary is-small"
         onClick={onFormatClick}
